@@ -6,6 +6,21 @@
   <meta name="theme-color" content="#5fb9f0">
   <title>Movimento de apoio em Mato Grosso</title>
   <meta name="description" content="Entre no grupo de apoio a José Medeiros, Flávio Bolsonaro e Ulysses Moraes em Mato Grosso.">
+  <!-- Preview ao compartilhar o link no WhatsApp/Facebook.
+       Troque as duas URLs abaixo pelo endereco real do site depois de publicar. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Candidatos do Bolsonaro em Mato Grosso">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Entre no grupo da sua cidade - Mato Grosso">
+  <meta property="og:description" content="Escolha seu municipio e entre no grupo oficial de WhatsApp. Sao 142 cidades de Mato Grosso.">
+  <meta property="og:image" content="cover.jpg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1536">
+  <meta property="og:image:alt" content="Ze do Bolsonaro 222, Flavio Bolsonaro 22 e Ulysses Moraes 20022">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Entre no grupo da sua cidade - Mato Grosso">
+  <meta name="twitter:description" content="Escolha seu municipio e entre no grupo oficial de WhatsApp. Sao 142 cidades de Mato Grosso.">
+  <meta name="twitter:image" content="cover.jpg">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23003f93'/%3E%3Cpath d='M9 32 32 13l23 19-23 19z' fill='%23ffd400'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%231a8f3c'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,8 +29,8 @@
     :root {
       --navy: #003f93;
       --navy-deep: #0b2350;
-      --green: #178a3a;
-      --green-hover: #127030;
+      --green: #15803d;
+      --green-hover: #0f6a31;
       --yellow: #ffd400;
       --sky-pale: #e6f4fd;
       --line: #d5e3f0;
@@ -157,7 +172,7 @@
       top: calc(100% + 6px);
       left: 0;
       right: 0;
-      max-height: 250px;
+      max-height: 250px; /* ajustada por JS conforme o espaco livre na tela */
       margin: 0;
       padding: 6px;
       overflow-y: auto;
@@ -258,7 +273,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      margin-top: 10px;
+      margin: 2px 0 0 -6px;
+      padding: 12px 6px;
       color: var(--muted);
       font-size: 13px;
       font-weight: 700;
@@ -629,6 +645,8 @@
     let results = [];
     let activeIndex = -1;
     let selectedCity = "";
+    let listaAbertaEm = 0;   // quando a lista apareceu na tela
+    let naoAbrirAte = 0;     // trava a abertura por foco logo apos o aviso de erro
 
     const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
@@ -655,21 +673,51 @@
           const item = document.createElement("li");
           const option = document.createElement("button");
           option.type = "button";
+          option.tabIndex = -1; // navegacao pelas setas; evita 142 paradas no Tab
           option.className = "city-picker__option";
           option.id = `city-option-${index}`;
           option.setAttribute("role", "option");
           option.setAttribute("aria-selected", "false");
           option.textContent = `${city} — MT`;
           option.addEventListener("mousedown", event => event.preventDefault());
-          option.addEventListener("click", () => selectCity(city));
+          option.addEventListener("click", () => selectCity(city, true));
           item.appendChild(option);
           list.appendChild(item);
         });
       }
 
+      const estavaAberta = list.classList.contains("is-open");
       list.classList.add("is-open");
       input.setAttribute("aria-expanded", "true");
+      // Marca o instante em que a lista APARECE (nao a cada tecla digitada)
+      if (!estavaAberta) listaAbertaEm = Date.now();
+      ajustarAlturaDaLista(!estavaAberta);
     }
+
+    // A lista nunca pode passar do fim da tela (teclado do celular aberto, tela baixa)
+    let ajustando = false;
+    function ajustarAlturaDaLista(podeRolar) {
+      if (ajustando || !list.classList.contains("is-open")) return;
+      ajustando = true;
+      const vv = window.visualViewport;
+      const fimDaTela = vv ? vv.offsetTop + vv.height : window.innerHeight;
+      let espaco = fimDaTela - list.getBoundingClientRect().top - 12;
+      // Sobrou pouco espaco: sobe a pagina para a lista caber, como o teclado nativo faz
+      if (podeRolar && espaco < 170) {
+        const alvo = (vv ? vv.offsetTop : 0) + 12;
+        window.scrollBy(0, Math.round(input.getBoundingClientRect().top - alvo));
+        espaco = fimDaTela - list.getBoundingClientRect().top - 12;
+      }
+      list.style.maxHeight = Math.max(120, Math.min(250, espaco)) + "px";
+      ajustando = false;
+    }
+
+    if (window.visualViewport) {
+      // teclado abrindo/fechando
+      window.visualViewport.addEventListener("resize", () => ajustarAlturaDaLista(true));
+      window.visualViewport.addEventListener("scroll", () => ajustarAlturaDaLista(false));
+    }
+    window.addEventListener("resize", () => ajustarAlturaDaLista(false));
 
     function closeList() {
       list.classList.remove("is-open");
@@ -687,7 +735,10 @@
       input.setAttribute("aria-activedescendant", options[activeIndex].id);
     }
 
-    function selectCity(city) {
+    function selectCity(city, porToque) {
+      // Protecao: se a lista acabou de aparecer debaixo do dedo, o mesmo toque
+      // que abriu a lista nao pode escolher uma cidade por acidente.
+      if (porToque && Date.now() - listaAbertaEm < 350) return;
       selectedCity = city;
       input.value = city;
       status.textContent = `✓ ${city} — MT selecionado`;
@@ -709,7 +760,10 @@
       closeList();
     }
 
-    input.addEventListener("focus", renderList);
+    input.addEventListener("focus", () => {
+      if (Date.now() < naoAbrirAte) return; // deixa o aviso de erro visivel
+      renderList();
+    });
     input.addEventListener("input", () => {
       input.classList.remove("is-error");
       if (input.value !== selectedCity) {
@@ -745,11 +799,14 @@
       if (selectedCity && !button.classList.contains("is-soon")) return;
       if (selectedCity) { event.preventDefault(); input.focus(); return; }
       event.preventDefault();
+      // Fecha a lista para o aviso ficar visivel e para nao cobrir o botao
+      closeList();
+      naoAbrirAte = Date.now() + 600;
       status.textContent = "Primeiro digite e escolha sua cidade.";
       status.classList.add("is-error");
       input.classList.add("is-error");
       input.placeholder = "Digite sua cidade aqui";
-      input.focus();
+      input.focus({ preventScroll: true });
     });
 
     document.addEventListener("click", event => {
