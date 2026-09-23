@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#5fb9f0">
+  <title>Movimento de apoio em Mato Grosso</title>
+  <meta name="description" content="Entre no grupo de apoio a José Medeiros, Flávio Bolsonaro e Ulysses Moraes em Mato Grosso.">
+  <!-- Preview ao compartilhar o link no WhatsApp/Facebook.
+       Troque as duas URLs abaixo pelo endereco real do site depois de publicar. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Candidatos do Bolsonaro em Mato Grosso">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Entre no grupo da sua cidade - Mato Grosso">
+  <meta property="og:description" content="Escolha seu municipio e entre no grupo oficial de WhatsApp. Sao 142 cidades de Mato Grosso.">
+  <meta property="og:image" content="https://ulysses-uquz.vercel.app/cover.jpg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1536">
+  <meta property="og:image:alt" content="Ze do Bolsonaro 222, Flavio Bolsonaro 22 e Ulysses Moraes 20022">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Entre no grupo da sua cidade - Mato Grosso">
+  <meta name="twitter:description" content="Escolha seu municipio e entre no grupo oficial de WhatsApp. Sao 142 cidades de Mato Grosso.">
+  <meta name="twitter:image" content="https://ulysses-uquz.vercel.app/cover.jpg">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23003f93'/%3E%3Cpath d='M9 32 32 13l23 19-23 19z' fill='%23ffd400'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%231a8f3c'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;0,700;0,800;0,900;1,900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #003f93;
+      --navy-deep: #0b2350;
+      --green: #15803d;
+      --green-hover: #0f6a31;
+      --yellow: #ffd400;
+      --sky-pale: #e6f4fd;
+      --line: #d5e3f0;
+      --muted: #5b6b82;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--navy-deep);
+      background: linear-gradient(180deg, var(--sky-pale) 0%, var(--white) 70%);
+      font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 32px 24px;
+    }
+
+    .layout {
+      width: min(100%, 1040px);
+      display: grid;
+      grid-template-columns: auto minmax(0, 480px);
+      grid-template-rows: auto auto;
+      justify-content: center;
+      column-gap: clamp(32px, 6vw, 72px);
+    }
+
+    .top { display: contents; }
+    .photo { grid-column: 1; grid-row: 1 / span 2; margin: 0; align-self: center; }
+    .head { grid-column: 2; grid-row: 1; align-self: end; }
+    .panel { grid-column: 2; grid-row: 2; align-self: start; }
+
+    .photo img {
+      display: block;
+      height: calc(100svh - 64px);
+      max-height: 760px;
+      width: auto;
+      aspect-ratio: 1024 / 1536;
+      border-radius: 20px;
+      box-shadow: 0 24px 56px rgba(0, 63, 147, .22);
+    }
+
+    .kicker {
+      margin: 0;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 8px 0 0;
+      color: var(--navy);
+      font-size: clamp(34px, 4vw, 48px);
+      font-weight: 900;
+      letter-spacing: -.03em;
+      line-height: 1.02;
+    }
+
+    .card {
+      margin-top: 24px;
+      padding: 24px;
+      border-radius: 20px;
+      background: var(--white);
+      box-shadow: 0 18px 44px rgba(0, 63, 147, .14);
+    }
+
+    .step { display: grid; gap: 10px; }
+    .step + .step { margin-top: 20px; }
+
+    .step__title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      color: var(--navy);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .step__num {
+      width: 26px;
+      height: 26px;
+      flex: none;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--navy);
+      background: var(--yellow);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .step--2.is-ready .step__num { color: var(--white); background: var(--green); }
+
+    .city-picker__control { position: relative; }
+
+    .city-picker input {
+      width: 100%;
+      min-height: 58px;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      outline: 0;
+      padding: 0 48px 0 16px;
+      color: var(--navy-deep);
+      background: var(--white);
+      font: inherit;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .city-picker input::placeholder { color: #8a99ad; font-weight: 600; }
+    .city-picker input::-webkit-search-cancel-button { display: none; }
+
+    .city-picker input:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 4px rgba(0, 63, 147, .12);
+    }
+
+    .city-picker__icon {
+      position: absolute;
+      top: 17px;
+      right: 16px;
+      width: 24px;
+      height: 24px;
+      color: var(--navy);
+      pointer-events: none;
+    }
+
+    .city-picker__list {
+      display: none;
+      position: absolute;
+      z-index: 8;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      max-height: 250px; /* ajustada por JS conforme o espaco livre na tela */
+      margin: 0;
+      padding: 6px;
+      overflow-y: auto;
+      list-style: none;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
+      box-shadow: 0 18px 40px rgba(11, 35, 80, .2);
+    }
+
+    .city-picker__list.is-open { display: block; }
+
+    .city-picker__option,
+    .city-picker__empty {
+      width: 100%;
+      border: 0;
+      border-radius: 9px;
+      padding: 12px 13px;
+      color: var(--navy-deep);
+      background: transparent;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    .city-picker__option { cursor: pointer; }
+    .city-picker__option:hover,
+    .city-picker__option[aria-selected="true"] { color: var(--navy); background: var(--sky-pale); }
+    .city-picker__empty { color: var(--muted); font-weight: 600; }
+
+    .city-picker__status {
+      min-height: 20px;
+      margin: 0;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .city-picker input.is-error { border-color: #b42318; box-shadow: 0 0 0 4px rgba(180, 35, 24, .12); }
+
+    .city-picker__status:empty { display: none; }
+    .city-picker__status.is-error { color: #b42318; }
+
+    .whatsapp {
+      width: 100%;
+      min-height: 64px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border-radius: 14px;
+      padding: 16px 20px;
+      color: var(--white);
+      background: var(--green);
+      box-shadow: 0 10px 24px rgba(23, 138, 58, .28);
+      font-size: 18px;
+      font-weight: 900;
+      text-align: center;
+      text-decoration: none;
+      transition: background-color .15s ease, transform .15s ease;
+    }
+
+    .whatsapp:hover { background: var(--green-hover); transform: translateY(-1px); }
+    .whatsapp:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+    .whatsapp.is-soon { color: var(--navy); background: #e3ecf6; box-shadow: none; }
+    .whatsapp.is-soon:hover { background: #e3ecf6; transform: none; }
+    .whatsapp svg { width: 26px; height: 26px; flex: none; }
+
+    .perks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .perks li { display: flex; align-items: center; gap: 6px; }
+    .perks li::before { content: "✓"; color: var(--green); font-weight: 900; }
+
+    .slate {
+      margin: 16px 0 0;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      line-height: 1.7;
+      text-transform: uppercase;
+    }
+
+    .more {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 2px 0 0 -6px;
+      padding: 12px 6px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .more:hover { color: var(--navy); }
+    .more svg { width: 16px; height: 16px; }
+
+    /* ---------- Seção de baixo ---------- */
+    .info {
+      padding: 64px 24px 88px;
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .info__inner {
+      width: min(100%, 1040px);
+      margin: 0 auto;
+      display: grid;
+      gap: 32px;
+    }
+
+    .info__image {
+      display: none;
+      width: 100%;
+      height: auto;
+      border-radius: 18px;
+    }
+
+    .info h2 {
+      margin: 0;
+      font-size: clamp(28px, 3.6vw, 40px);
+      font-weight: 900;
+      letter-spacing: -.03em;
+      line-height: 1.08;
+    }
+
+    .info__list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .info__list li {
+      padding: 22px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .14);
+    }
+
+    .info__list strong {
+      display: block;
+      color: var(--yellow);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .info__list span {
+      display: block;
+      margin-top: 6px;
+      color: #d6e2f3;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .info__cta {
+      justify-self: start;
+      width: auto;
+      min-width: 300px;
+    }
+
+    /* Barra fixa no celular quando o formulário sai da tela */
+    .sticky {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      display: none;
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 -8px 24px rgba(11, 35, 80, .12);
+      transform: translateY(110%);
+      transition: transform .2s ease;
+    }
+
+    .sticky.is-visible { transform: translateY(0); }
+    .sticky .whatsapp { min-height: 54px; }
+
+    @media (max-width: 860px) {
+      .page { min-height: auto; place-items: start center; padding: 18px 16px 28px; }
+      .layout { grid-template-columns: 1fr; }
+
+      .top {
+        display: grid;
+        grid-template-columns: 84px 1fr;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .photo, .head, .panel { grid-column: auto; grid-row: auto; }
+
+      .photo img {
+        width: 84px;
+        height: 126px;
+        max-height: none;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 63, 147, .2);
+      }
+
+      .kicker { font-size: 12px; }
+      h1 { margin-top: 4px; font-size: clamp(25px, 7.4vw, 32px); }
+      .card { margin-top: 18px; padding: 18px 16px; }
+      .whatsapp { font-size: 16px; }
+      .perks { justify-content: center; font-size: 12px; }
+      .slate { font-size: 11px; text-align: center; }
+      .more { display: flex; justify-content: center; }
+      .info { padding: 20px 16px 96px; }
+      .info__inner { gap: 24px; }
+      .info__image { display: block; }
+      .info__list { grid-template-columns: 1fr; gap: 10px; }
+      .info__list li { padding: 16px 18px; }
+      .info__cta { justify-self: stretch; min-width: 0; }
+      .sticky { display: block; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .whatsapp, .sticky { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" id="grupo">
+    <div class="layout">
+      <div class="top">
+        <figure class="photo">
+          <img src="capa-760.webp"
+             srcset="capa-520.webp 520w, capa-760.webp 760w, capa-1024.webp 1024w"
+             sizes="(max-width: 760px) 100vw, 520px"
+             width="760" height="1140" fetchpriority="high" decoding="async"
+             alt="Zé do Bolsonaro, senador 222, Flávio Bolsonaro, presidente 22, e Ulysses Moraes, deputado estadual 20022">
+        </figure>
+        <div class="head">
+          <p class="kicker">Grupo oficial de WhatsApp · MT</p>
+          <h1>Entre no grupo da sua cidade</h1>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="card">
+          <div class="step step--1 city-picker">
+            <label class="step__title" for="city-search"><span class="step__num">1</span>Digite sua cidade</label>
+            <div class="city-picker__control">
+              <input id="city-search" type="search" role="combobox" autocomplete="off" placeholder="Ex.: Cuiabá" aria-autocomplete="list" aria-controls="city-list" aria-expanded="false">
+              <svg class="city-picker__icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-4.35-4.35m2.35-5.15A7.5 7.5 0 1 1 4 11.5a7.5 7.5 0 0 1 15 0Z"/></svg>
+              <ul class="city-picker__list" id="city-list" role="listbox" aria-label="Municípios de Mato Grosso"></ul>
+            </div>
+            <p class="city-picker__status" id="city-status" aria-live="polite"></p>
+          </div>
+
+          <div class="step step--2">
+            <p class="step__title"><span class="step__num">2</span>Toque para entrar</p>
+            <a class="whatsapp" id="whatsapp-link" href="#city-search" target="_blank" rel="noopener noreferrer" aria-label="Entrar no grupo">
+              <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.04 3A12.86 12.86 0 0 0 5.2 22.8L3.5 29l6.35-1.66A12.9 12.9 0 1 0 16.04 3Zm0 23.62c-2.1 0-4.14-.57-5.93-1.65l-.43-.26-3.77.99 1.01-3.67-.28-.45a10.52 10.52 0 1 1 9.4 5.04Zm5.77-7.88c-.32-.16-1.87-.92-2.16-1.03-.29-.11-.5-.16-.71.16-.21.32-.82 1.03-1 1.24-.19.21-.37.24-.69.08-.32-.16-1.33-.49-2.54-1.57a9.48 9.48 0 0 1-1.76-2.19c-.18-.32-.02-.49.14-.65.14-.14.32-.37.47-.55.16-.18.21-.32.32-.53.1-.21.05-.4-.03-.55-.08-.16-.71-1.71-.97-2.34-.26-.62-.52-.53-.71-.54h-.61c-.21 0-.55.08-.84.4-.29.32-1.1 1.08-1.1 2.63s1.13 3.05 1.29 3.26c.16.21 2.22 3.39 5.38 4.75.75.32 1.34.52 1.8.67.76.24 1.44.21 1.98.13.61-.09 1.87-.77 2.14-1.5.26-.74.26-1.37.18-1.5-.08-.14-.29-.22-.61-.38Z"/></svg>
+              <span id="whatsapp-label">ENTRAR NO GRUPO</span>
+            </a>
+          </div>
+        </div>
+
+        <ul class="perks">
+          <li>Novidades em primeira mão</li>
+          <li>Ações na sua cidade</li>
+          <li>Gratuito</li>
+        </ul>
+
+        <p class="slate">José Medeiros · Senador &nbsp;|&nbsp; Flávio Bolsonaro · Presidente &nbsp;|&nbsp; Ulysses Moraes 20022 · Deputado Estadual</p>
+        <a class="more" href="#sobre">Saiba mais sobre o grupo <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg></a>
+      </div>
+    </div>
+  </main>
+
+  <section class="info" id="sobre" aria-labelledby="info-title">
+    <div class="info__inner">
+      <img class="info__image" id="info-image" alt="Zé do Bolsonaro, senador 222, Flávio Bolsonaro, presidente 22, e Ulysses Moraes, deputado estadual 20022">
+      <h2 id="info-title">O que você recebe no grupo</h2>
+      <ul class="info__list">
+        <li><strong>Em primeira mão</strong><span>Conteúdos e informações antes de todo mundo.</span></li>
+        <li><strong>Na sua cidade</strong><span>Ações e mobilizações em Mato Grosso.</span></li>
+        <li><strong>Materiais oficiais</strong><span>Tudo pronto para você compartilhar.</span></li>
+      </ul>
+      <a class="whatsapp info__cta js-go-form" href="#grupo"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.04 3A12.86 12.86 0 0 0 5.2 22.8L3.5 29l6.35-1.66A12.9 12.9 0 1 0 16.04 3Zm0 23.62c-2.1 0-4.14-.57-5.93-1.65l-.43-.26-3.77.99 1.01-3.67-.28-.45a10.52 10.52 0 1 1 9.4 5.04Zm5.77-7.88c-.32-.16-1.87-.92-2.16-1.03-.29-.11-.5-.16-.71.16-.21.32-.82 1.03-1 1.24-.19.21-.37.24-.69.08-.32-.16-1.33-.49-2.54-1.57a9.48 9.48 0 0 1-1.76-2.19c-.18-.32-.02-.49.14-.65.14-.14.32-.37.47-.55.16-.18.21-.32.32-.53.1-.21.05-.4-.03-.55-.08-.16-.71-1.71-.97-2.34-.26-.62-.52-.53-.71-.54h-.61c-.21 0-.55.08-.84.4-.29.32-1.1 1.08-1.1 2.63s1.13 3.05 1.29 3.26c.16.21 2.22 3.39 5.38 4.75.75.32 1.34.52 1.8.67.76.24 1.44.21 1.98.13.61-.09 1.87-.77 2.14-1.5.26-.74.26-1.37.18-1.5-.08-.14-.29-.22-.61-.38Z"/></svg><span>ESCOLHER MINHA CIDADE</span></a>
+    </div>
+  </section>
+
+  <div class="sticky" id="sticky" aria-hidden="true">
+    <a class="whatsapp js-go-form" href="#grupo" tabindex="-1"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.04 3A12.86 12.86 0 0 0 5.2 22.8L3.5 29l6.35-1.66A12.9 12.9 0 1 0 16.04 3Zm0 23.62c-2.1 0-4.14-.57-5.93-1.65l-.43-.26-3.77.99 1.01-3.67-.28-.45a10.52 10.52 0 1 1 9.4 5.04Zm5.77-7.88c-.32-.16-1.87-.92-2.16-1.03-.29-.11-.5-.16-.71.16-.21.32-.82 1.03-1 1.24-.19.21-.37.24-.69.08-.32-.16-1.33-.49-2.54-1.57a9.48 9.48 0 0 1-1.76-2.19c-.18-.32-.02-.49.14-.65.14-.14.32-.37.47-.55.16-.18.21-.32.32-.53.1-.21.05-.4-.03-.55-.08-.16-.71-1.71-.97-2.34-.26-.62-.52-.53-.71-.54h-.61c-.21 0-.55.08-.84.4-.29.32-1.1 1.08-1.1 2.63s1.13 3.05 1.29 3.26c.16.21 2.22 3.39 5.38 4.75.75.32 1.34.52 1.8.67.76.24 1.44.21 1.98.13.61-.09 1.87-.77 2.14-1.5.26-.74.26-1.37.18-1.5-.08-.14-.29-.22-.61-.38Z"/></svg><span>ENTRAR NO GRUPO</span></a>
+  </div>
+<script>
+    const MUNICIPIOS = [
+      "Acorizal", "Água Boa", "Alta Floresta", "Alto Araguaia", "Alto Boa Vista", "Alto Garças", "Alto Paraguai", "Alto Taquari", "Apiacás", "Araguaiana", "Araguainha", "Araputanga", "Arenápolis", "Aripuanã", "Barão de Melgaço", "Barra do Bugres", "Barra do Garças", "Boa Esperança do Norte", "Bom Jesus do Araguaia", "Brasnorte", "Cáceres", "Campinápolis", "Campo Novo do Parecis", "Campo Verde", "Campos de Júlio", "Canabrava do Norte", "Canarana", "Carlinda", "Castanheira", "Chapada dos Guimarães", "Cláudia", "Cocalinho", "Colíder", "Colniza", "Comodoro", "Confresa", "Conquista d'Oeste", "Cotriguaçu", "Cuiabá", "Curvelândia", "Denise", "Diamantino", "Dom Aquino", "Feliz Natal", "Figueirópolis d'Oeste", "Gaúcha do Norte", "General Carneiro", "Glória d'Oeste", "Guarantã do Norte", "Guiratinga", "Indiavaí", "Ipiranga do Norte", "Itanhangá", "Itaúba", "Itiquira", "Jaciara", "Jangada", "Jauru", "Juara", "Juína", "Juruena", "Juscimeira", "Lambari d'Oeste", "Lucas do Rio Verde", "Luciara", "Marcelândia", "Matupá", "Mirassol d'Oeste", "Nobres", "Nortelândia", "Nossa Senhora do Livramento", "Nova Bandeirantes", "Nova Brasilândia", "Nova Canaã do Norte", "Nova Guarita", "Nova Lacerda", "Nova Marilândia", "Nova Maringá", "Nova Monte Verde", "Nova Mutum", "Nova Nazaré", "Nova Olímpia", "Nova Santa Helena", "Nova Ubiratã", "Nova Xavantina", "Novo Horizonte do Norte", "Novo Mundo", "Novo Santo Antônio", "Novo São Joaquim", "Paranaíta", "Paranatinga", "Pedra Preta", "Peixoto de Azevedo", "Planalto da Serra", "Poconé", "Pontal do Araguaia", "Ponte Branca", "Pontes e Lacerda", "Porto Alegre do Norte", "Porto dos Gaúchos", "Porto Esperidião", "Porto Estrela", "Poxoréu", "Primavera do Leste", "Querência", "Reserva do Cabaçal", "Ribeirão Cascalheira", "Ribeirãozinho", "Rio Branco", "Rondolândia", "Rondonópolis", "Rosário Oeste", "Salto do Céu", "Santa Carmem", "Santa Cruz do Xingu", "Santa Rita do Trivelato", "Santa Terezinha", "Santo Afonso", "Santo Antônio do Leste", "Santo Antônio de Leverger", "São Félix do Araguaia", "São José do Povo", "São José do Rio Claro", "São José do Xingu", "São José dos Quatro Marcos", "São Pedro da Cipa", "Sapezal", "Serra Nova Dourada", "Sinop", "Sorriso", "Tabaporã", "Tangará da Serra", "Tapurah", "Terra Nova do Norte", "Tesouro", "Torixoréu", "União do Sul", "Vale de São Domingos", "Várzea Grande", "Vera", "Vila Bela da Santíssima Trindade", "Vila Rica"
+    ];
+
+    // Comunidades "Candidatos do Bolsonaro em [cidade]", numeradas a partir do #20
+    // na mesma ordem da lista MUNICIPIOS acima (#20 Acorizal, #21 Água Boa ... #161 Vila Rica).
+    // Para adicionar: cole a próxima linha com o número e o link.
+    const COMUNIDADES = {
+      20: "https://chat.whatsapp.com/JUmwRpfAPIFLfcO0RpRuUE", // Acorizal
+      21: "https://chat.whatsapp.com/I0Sc1oJZKIeJYMeVep5P0p", // Água Boa
+      22: "https://chat.whatsapp.com/HhH39M4YvdT07mmehWEPOQ", // Alta Floresta
+      23: "https://chat.whatsapp.com/HJ8uj3ByxyxL7iltwIs2p8", // Alto Araguaia
+      24: "https://chat.whatsapp.com/HYOhRIEPBkA3Ul9ObSShVN", // Alto Boa Vista
+      25: "https://chat.whatsapp.com/EkffrNE8mxMLfEGSzrlUbR", // Alto Garças
+      26: "https://chat.whatsapp.com/HqKU1GF8Sue4dCnqhkownD", // Alto Paraguai
+      27: "https://chat.whatsapp.com/BXcd6Oc9PEm5owTXvidFec", // Alto Taquari
+      28: "https://chat.whatsapp.com/JIMaYG4gIhuAzEpjijOCE3", // Apiacás
+      29: "https://chat.whatsapp.com/GzwM8LXxSDSFR4G0f51e8L", // Araguaiana
+      30: "https://chat.whatsapp.com/HSrYJQgyEn06AaGnnMTzoq", // Araguainha
+      31: "https://chat.whatsapp.com/LOGmw57oLlwEFWI2sDIVU4", // Araputanga
+      32: "https://chat.whatsapp.com/CAeg7kIYu1LJ4oDwdpHlZ1", // Arenápolis
+      33: "https://chat.whatsapp.com/CsBBcf3P1Ii0riRujety3X", // Aripuanã
+      34: "https://chat.whatsapp.com/Iwr24Zmfmes9ThJjpmwNzO", // Barão de Melgaço
+      35: "https://chat.whatsapp.com/IYY3smEPW35IyJct8srWs9", // Barra do Bugres
+      36: "https://chat.whatsapp.com/E59mQVqCQLeEB73pDEVdZb", // Barra do Garças
+      37: "https://chat.whatsapp.com/H2eXiTo9Hgx84E9mq2HZhu", // Boa Esperança do Norte
+      38: "https://chat.whatsapp.com/L5OyxQTNxUK7HGtOuVUgSR", // Bom Jesus do Araguaia
+      39: "https://chat.whatsapp.com/JMe2YYsm1IgE4S4ZGiXXut", // Brasnorte
+      40: "https://chat.whatsapp.com/IU0buW1QfQJKk5BjS2zCJe", // Cáceres
+      41: "https://chat.whatsapp.com/K6G2z11icpp7iXe0EWhSLf", // Campinápolis
+      42: "https://chat.whatsapp.com/EDdDoAzAk4dJHzlTq2UlI0", // Campo Novo do Parecis
+      43: "https://chat.whatsapp.com/GPHjSOCIdndA7sFQCC43fM", // Campo Verde
+      44: "https://chat.whatsapp.com/HQ1Jmio2w82JaqAwSfSKQj", // Campos de Júlio
+      45: "https://chat.whatsapp.com/BcVR1MuDhxW7zfLp90W9qc", // Canabrava do Norte
+      46: "https://chat.whatsapp.com/GCOqjGIlT3908yng9iMCeK", // Canarana
+      47: "https://chat.whatsapp.com/CgRRfIDYZFB5k2dZ3rLqTt", // Carlinda
+      48: "https://chat.whatsapp.com/LTg0gZdSpr8DyD5KRS8757", // Castanheira
+      49: "https://chat.whatsapp.com/J0tcs5v1RZ84VqeaNpTpQ3", // Chapada dos Guimarães
+      50: "https://chat.whatsapp.com/IAQ8XqwuErHFc3qHmBFWf3", // Cláudia
+      51: "https://chat.whatsapp.com/K9hsIc5ZT7G5qjWCcOHeTR", // Cocalinho
+      52: "https://chat.whatsapp.com/HG2xJRhd8KwDxsAeUeLNzO", // Colíder
+      53: "https://chat.whatsapp.com/GRUdLH910zBKweikuianTb", // Colniza
+      54: "https://chat.whatsapp.com/IPDTv4QPxlFHEB0GWg7AiA", // Comodoro
+      55: "https://chat.whatsapp.com/DKbslMkE5mB5vEG0hKKCXb", // Confresa
+      56: "https://chat.whatsapp.com/B9V2AqlGya92CdUpb0TrI2", // Conquista d'Oeste
+      57: "https://chat.whatsapp.com/EORBDRN5PSs3d3kccZhz02", // Cotriguaçu
+      58: "https://chat.whatsapp.com/KSwpcAlYbogHoxaPHubIQs", // Cuiabá
+      59: "https://chat.whatsapp.com/LsnWDHmx7ECFJtYlVTydmy", // Curvelândia
+      60: "https://chat.whatsapp.com/CoKXoDoo1u4ED9jTmmNvq1", // Denise
+      61: "https://chat.whatsapp.com/JEXa1ghufau5cudfbqDdvr", // Diamantino
+      62: "https://chat.whatsapp.com/JKClpVVC6T16EsGmcFblGQ", // Dom Aquino
+      63: "https://chat.whatsapp.com/Ev79QWnYrdy8JekQ5XvUwR", // Feliz Natal
+      64: "https://chat.whatsapp.com/EdM5QpTSGnt2Wg8KdU4Ne9", // Figueirópolis d'Oeste
+      65: "https://chat.whatsapp.com/JuJnI31yMx4HaJFkD4ehMY", // Gaúcha do Norte
+      66: "https://chat.whatsapp.com/FORPGxhf7SIJ3WjsSImn8a", // General Carneiro
+      67: "https://chat.whatsapp.com/IS05XyCHhdL5hKyDlxj23M", // Glória d'Oeste
+      68: "https://chat.whatsapp.com/JWx6Bly3gewEdCncvrC3e9", // Guarantã do Norte
+      69: "https://chat.whatsapp.com/Lwlc4XCntMoEl5bcxMZqAU", // Guiratinga
+      70: "https://chat.whatsapp.com/Iy9edqQet1pKJqrwrfyvXg", // Indiavaí
+      71: "https://chat.whatsapp.com/LlbfFyvcoi0B8sAwJDA4r9", // Ipiranga do Norte
+      72: "https://chat.whatsapp.com/DnlspLDu0Lb4648owFPknu", // Itanhangá
+      73: "https://chat.whatsapp.com/HrVx6tlrDlu2AhsPAL1It0", // Itaúba
+      74: "https://chat.whatsapp.com/FNUaapppXOh3JUuOx4bf14", // Itiquira
+      75: "https://chat.whatsapp.com/FoLUznKoY4F9Cdg8Hy6SBt", // Jaciara
+      76: "https://chat.whatsapp.com/Fmot8cFwyLrLkbPWpwfTJO", // Jangada
+      77: "https://chat.whatsapp.com/DUpuNpPS3BT5KE6FhA0AJF", // Jauru
+      78: "https://chat.whatsapp.com/FihWuVMPtyvJyBd0LL0nh0", // Juara
+      79: "https://chat.whatsapp.com/JJO5PVI6Bt2CVbXGen1fQ4", // Juína
+      80: "https://chat.whatsapp.com/HyIzASmTPGD8Tyc9lD35Y6", // Juruena
+      81: "https://chat.whatsapp.com/DlP7ivlg75XC6SyB8hr4Nc", // Juscimeira
+      82: "https://chat.whatsapp.com/FbOih3J2Xah0cjq2OW3EhW", // Lambari d'Oeste
+      83: "https://chat.whatsapp.com/E8ix4aYi8jA8WGBKFjOoZ0", // Lucas do Rio Verde
+      84: "https://chat.whatsapp.com/HwhouQavhf9HJNlwUHQO23", // Luciara
+      85: "https://chat.whatsapp.com/JWW7Shoebv39XwgoHgh2FT", // Marcelândia
+      86: "https://chat.whatsapp.com/BLk7u58QHUl4haSjzfFscP", // Matupá
+      87: "https://chat.whatsapp.com/IpMdpYW1mpHCCDXyha0jqt", // Mirassol d'Oeste
+      88: "https://chat.whatsapp.com/DSqYajz58FsDXHZxWj0vNc", // Nobres
+      89: "https://chat.whatsapp.com/G8ojZVQmw7H4Dk6ESFBi9H", // Nortelândia
+      90: "https://chat.whatsapp.com/FziHoZe6vcpIHJoEwgSWP1", // Nossa Senhora do Livramento
+      91: "https://chat.whatsapp.com/ENOxPpt0poJ49gmuMLUWgU", // Nova Bandeirantes
+      92: "https://chat.whatsapp.com/L8hb1FjQLybExMKAqlbXOL", // Nova Brasilândia
+      93: "https://chat.whatsapp.com/DbVdPmfQ6clKRrjTzo4Ksi", // Nova Canaã do Norte
+      94: "https://chat.whatsapp.com/ERGZruWmBGs22ASSwBBDit", // Nova Guarita
+      95: "https://chat.whatsapp.com/HNYgC4YEgYy3GNekfenwqq", // Nova Lacerda
+      96: "https://chat.whatsapp.com/FqUzesv9VQMDdxqmnIUhPF", // Nova Marilândia
+      97: "https://chat.whatsapp.com/HF2tDIO3WqwDewgdrQcg0h", // Nova Maringá
+      98: "https://chat.whatsapp.com/EyS2MpX4eiyDLY799P5SrP", // Nova Monte Verde
+      99: "https://chat.whatsapp.com/CVapSGZy2300O7X0ScqD8Q", // Nova Mutum
+      100: "https://chat.whatsapp.com/H1BP4FbrzM0E9gMiTt4NtR", // Nova Nazaré
+      101: "https://chat.whatsapp.com/DTITyewUTK3HmZfc6vHab2", // Nova Olímpia
+      102: "https://chat.whatsapp.com/C7Zu1VSC9xv2NvXKvkAPnr", // Nova Santa Helena
+      103: "https://chat.whatsapp.com/DNm3cgqfNczB65Be0qIaRf", // Nova Ubiratã
+      104: "https://chat.whatsapp.com/GHmPLMBUAxnHb45EJBitJJ", // Nova Xavantina
+      105: "https://chat.whatsapp.com/K1kMrVC64ccCxSwZumataK", // Novo Horizonte do Norte
+      106: "https://chat.whatsapp.com/I0oyMtg7DgW9SAPK7cN0SU", // Novo Mundo
+      107: "https://chat.whatsapp.com/GB4DFj6D2gtCjKeFxp5TCm", // Novo Santo Antônio
+      108: "https://chat.whatsapp.com/ErB3AuUALdp7qeVAjBMHgQ", // Novo São Joaquim
+      109: "https://chat.whatsapp.com/DTWIdUn1Yf2760R4ph2tTC", // Paranaíta
+      110: "https://chat.whatsapp.com/I0TMNT8Dy9E7iMxCEEafqC", // Paranatinga
+      111: "https://chat.whatsapp.com/DXiTaEDnfWVGlMi4itJqsY", // Pedra Preta
+      112: "https://chat.whatsapp.com/LfmjOql1A2z32NV2MqsTt2", // Peixoto de Azevedo
+      113: "https://chat.whatsapp.com/GeSvQ6HEI1F4F24PTbMazB", // Planalto da Serra
+      114: "https://chat.whatsapp.com/GKLvfHyEjaj4M6HBkVUcw1", // Poconé
+      115: "https://chat.whatsapp.com/CHwVzkS1K2gJ8QDcDj8ipt", // Pontal do Araguaia
+      116: "https://chat.whatsapp.com/BwNY5LzYq4C6v0kcgdLkQp", // Ponte Branca
+      117: "https://chat.whatsapp.com/BBfsHjBvQ9XGipN9o0b26w", // Pontes e Lacerda
+      118: "https://chat.whatsapp.com/CNKdB3bPXh3D1mNt56W6fI", // Porto Alegre do Norte
+      119: "https://chat.whatsapp.com/FzUMn0CBlvJI7zM5U7nxs6", // Porto dos Gaúchos
+      120: "https://chat.whatsapp.com/LKkooiCnD2fGu9wVg3uvZ6", // Porto Esperidião
+      121: "https://chat.whatsapp.com/Go1bl1k4j4tKzL1ICMPL6u", // Porto Estrela
+      122: "https://chat.whatsapp.com/C13GvhGhd4A349SXJwoIKH", // Poxoréu
+      123: "https://chat.whatsapp.com/B8z55GWHFan2yASBbs8YCW", // Primavera do Leste
+      124: "https://chat.whatsapp.com/Lv4S188LyimJ25HqEMsJ55", // Querência
+      125: "https://chat.whatsapp.com/Jp7youTk9bYKyEccYxn5ch", // Reserva do Cabaçal
+      126: "https://chat.whatsapp.com/GmNqKxDEbpRH8ay7sgMEJE", // Ribeirão Cascalheira
+      127: "https://chat.whatsapp.com/IEkrObTBuhTLB9s6eurlp1", // Ribeirãozinho
+      128: "https://chat.whatsapp.com/JBG5Xr0q6xO0OUzeJzYMQt", // Rio Branco
+      129: "https://chat.whatsapp.com/G5XMDuM0a2OGtZ33nFH3JD", // Rondolândia
+      130: "https://chat.whatsapp.com/C2XEHWlbBtSG8tEJO157hP", // Rondonópolis
+      131: "https://chat.whatsapp.com/H1BaSNRceLU8iJkVKlwpGC", // Rosário Oeste
+      132: "https://chat.whatsapp.com/GS6ziPzvy5dAZTkIb9oFo5", // Salto do Céu
+      133: "https://chat.whatsapp.com/BCsHyeCD8FX4Edn9mZfw4M", // Santa Carmem
+      134: "https://chat.whatsapp.com/LSzUkTHoYbN3ybx70wn5Lr", // Santa Cruz do Xingu
+      135: "https://chat.whatsapp.com/HzNzPhzQPBH5nuvbFT6k5j", // Santa Rita do Trivelato
+      136: "https://chat.whatsapp.com/J1cWHCBJiDC2mdJNezoX8L", // Santa Terezinha
+      137: "https://chat.whatsapp.com/F8UKpxPeSGPA4hLXieoDkx", // Santo Afonso
+      138: "https://chat.whatsapp.com/FZyriYDZc7WA8Jmu5ymphl", // Santo Antônio do Leste
+      139: "https://chat.whatsapp.com/CiYzZpYAmW6JTAjQoag7Tj", // Santo Antônio de Leverger
+      140: "https://chat.whatsapp.com/Imr1SAhEXLdH1zaC9D6uuP", // São Félix do Araguaia
+      141: "https://chat.whatsapp.com/Df1KzzVbS2F2wj1tfAxZJ8", // São José do Povo
+      142: "https://chat.whatsapp.com/DdWS0XFK29HLBspP9CR9Mn", // São José do Rio Claro
+      143: "https://chat.whatsapp.com/CMk1LPwadJv1sbmMzwIHFG", // São José do Xingu
+      144: "https://chat.whatsapp.com/DRfrsB0y0wCAilkW6AayTn", // São José dos Quatro Marcos
+      145: "https://chat.whatsapp.com/H5OwVgcfnADDanUdDWEiRc", // São Pedro da Cipa
+      146: "https://chat.whatsapp.com/D2nX72BKMq15HzzyExedQi", // Sapezal
+      147: "https://chat.whatsapp.com/GNdMX017gr6BEtUOVimk2q", // Serra Nova Dourada
+      148: "https://chat.whatsapp.com/Li0rTl0XzwIFEXmuRKRiD0", // Sinop
+      149: "https://chat.whatsapp.com/EJqTNq320D4Fg5Fgdk0eyp", // Sorriso
+      150: "https://chat.whatsapp.com/CylXUF19Jkt0aObX4cnZtb", // Tabaporã
+      151: "https://chat.whatsapp.com/IDfO8qTC4W11FC991Dxjya", // Tangará da Serra
+      152: "https://chat.whatsapp.com/EGpvwuonHuT4WCeWC0wKkT", // Tapurah
+      153: "https://chat.whatsapp.com/DvHeV8sGlWu50JuRPPYbyW", // Terra Nova do Norte
+      154: "https://chat.whatsapp.com/B83ZTrwuogCIL6X5tR5rKz", // Tesouro
+      155: "https://chat.whatsapp.com/LshtZR6R7UR2Jy9edHGSfR", // Torixoréu
+      156: "https://chat.whatsapp.com/G8Q7iuv60EoAtIP3GlpqVN", // União do Sul
+      157: "https://chat.whatsapp.com/Lkq16VMpvbl9Sqx3QFLwwB", // Vale de São Domingos
+      158: "https://chat.whatsapp.com/H372YHqrOmNKoQ8B6GQlc3", // Várzea Grande
+      159: "https://chat.whatsapp.com/Cc2PKL8IMXlLm7SiOBUXXe", // Vera
+      160: "https://chat.whatsapp.com/EqWcRuTowGFLodKQQoExxy", // Vila Bela da Santíssima Trindade
+      161: "https://chat.whatsapp.com/CwhlG3ZgdH1BVuFarbGoNm", // Vila Rica
+    };
+
+    const PRIMEIRO_NUMERO = 20;
+
+    function numeroDaCidade(city) {
+      return MUNICIPIOS.indexOf(city) + PRIMEIRO_NUMERO;
+    }
+
+    function linkDaCidade(city) {
+      return COMUNIDADES[numeroDaCidade(city)] || null;
+    }
+
+    const input = document.getElementById("city-search");
+    const list = document.getElementById("city-list");
+    const status = document.getElementById("city-status");
+    const button = document.getElementById("whatsapp-link");
+    const buttonLabel = document.getElementById("whatsapp-label");
+    let results = [];
+    let activeIndex = -1;
+    let selectedCity = "";
+    let listaAbertaEm = 0;   // quando a lista apareceu na tela
+    let naoAbrirAte = 0;     // trava a abertura por foco logo apos o aviso de erro
+
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+    function filteredCities(query) {
+      const term = normalize(query.trim());
+      if (!term) return MUNICIPIOS;
+      return MUNICIPIOS
+        .filter(city => normalize(city).includes(term))
+        .sort((a, b) => Number(normalize(b).startsWith(term)) - Number(normalize(a).startsWith(term)) || a.localeCompare(b, "pt-BR"));
+    }
+
+    function renderList() {
+      results = filteredCities(input.value);
+      activeIndex = -1;
+      list.innerHTML = "";
+
+      if (!results.length) {
+        const empty = document.createElement("li");
+        empty.className = "city-picker__empty";
+        empty.textContent = "Nenhum município encontrado.";
+        list.appendChild(empty);
+      } else {
+        results.forEach((city, index) => {
+          const item = document.createElement("li");
+          const option = document.createElement("button");
+          option.type = "button";
+          option.tabIndex = -1; // navegacao pelas setas; evita 142 paradas no Tab
+          option.className = "city-picker__option";
+          option.id = `city-option-${index}`;
+          option.setAttribute("role", "option");
+          option.setAttribute("aria-selected", "false");
+          option.textContent = `${city} — MT`;
+          option.addEventListener("mousedown", event => event.preventDefault());
+          option.addEventListener("click", () => selectCity(city, true));
+          item.appendChild(option);
+          list.appendChild(item);
+        });
+      }
+
+      const estavaAberta = list.classList.contains("is-open");
+      list.classList.add("is-open");
+      input.setAttribute("aria-expanded", "true");
+      // Marca o instante em que a lista APARECE (nao a cada tecla digitada)
+      if (!estavaAberta) listaAbertaEm = Date.now();
+      ajustarAlturaDaLista(!estavaAberta);
+    }
+
+    // A lista nunca pode passar do fim da tela (teclado do celular aberto, tela baixa)
+    let ajustando = false;
+    function ajustarAlturaDaLista(podeRolar) {
+      if (ajustando || !list.classList.contains("is-open")) return;
+      ajustando = true;
+      const vv = window.visualViewport;
+      const fimDaTela = vv ? vv.offsetTop + vv.height : window.innerHeight;
+      let espaco = fimDaTela - list.getBoundingClientRect().top - 12;
+      // Sobrou pouco espaco: sobe a pagina para a lista caber, como o teclado nativo faz
+      if (podeRolar && espaco < 170) {
+        const alvo = (vv ? vv.offsetTop : 0) + 12;
+        window.scrollBy(0, Math.round(input.getBoundingClientRect().top - alvo));
+        espaco = fimDaTela - list.getBoundingClientRect().top - 12;
+      }
+      list.style.maxHeight = Math.max(120, Math.min(250, espaco)) + "px";
+      ajustando = false;
+    }
+
+    if (window.visualViewport) {
+      // teclado abrindo/fechando
+      window.visualViewport.addEventListener("resize", () => ajustarAlturaDaLista(true));
+      window.visualViewport.addEventListener("scroll", () => ajustarAlturaDaLista(false));
+    }
+    window.addEventListener("resize", () => ajustarAlturaDaLista(false));
+
+    function closeList() {
+      list.classList.remove("is-open");
+      input.setAttribute("aria-expanded", "false");
+      input.removeAttribute("aria-activedescendant");
+      activeIndex = -1;
+    }
+
+    function setActive(index) {
+      const options = [...list.querySelectorAll("[role='option']")];
+      if (!options.length) return;
+      activeIndex = (index + options.length) % options.length;
+      options.forEach((option, i) => option.setAttribute("aria-selected", String(i === activeIndex)));
+      options[activeIndex].scrollIntoView({ block: "nearest" });
+      input.setAttribute("aria-activedescendant", options[activeIndex].id);
+    }
+
+    function selectCity(city, porToque) {
+      // Protecao: se a lista acabou de aparecer debaixo do dedo, o mesmo toque
+      // que abriu a lista nao pode escolher uma cidade por acidente.
+      if (porToque && Date.now() - listaAbertaEm < 350) return;
+      selectedCity = city;
+      input.value = city;
+      status.textContent = `✓ ${city} — MT selecionado`;
+      status.classList.remove("is-error");
+      document.querySelector(".step--2").classList.add("is-ready");
+      const link = linkDaCidade(city);
+      button.classList.toggle("is-soon", !link);
+      if (link) {
+        button.href = link;
+        button.setAttribute("aria-label", `Entrar no grupo de ${city}`);
+        buttonLabel.textContent = `ENTRAR NO GRUPO DE ${city.toUpperCase()}`;
+      } else {
+        button.setAttribute("href", "#city-search");
+        button.setAttribute("aria-label", `O grupo de ${city} abre em breve`);
+        buttonLabel.textContent = "GRUPO EM BREVE";
+        document.querySelector(".step--2").classList.remove("is-ready");
+        status.textContent = `O grupo de ${city} está sendo criado. Volte em breve!`;
+      }
+      closeList();
+    }
+
+    input.addEventListener("focus", () => {
+      if (Date.now() < naoAbrirAte) return; // deixa o aviso de erro visivel
+      renderList();
+    });
+    input.addEventListener("input", () => {
+      input.classList.remove("is-error");
+      if (input.value !== selectedCity) {
+        selectedCity = "";
+        status.textContent = "";
+        status.classList.remove("is-error");
+        button.classList.remove("is-soon");
+        button.setAttribute("href", "#city-search");
+        button.setAttribute("aria-label", "Entrar no grupo");
+        buttonLabel.textContent = "ENTRAR NO GRUPO";
+        document.querySelector(".step--2").classList.remove("is-ready");
+      }
+      renderList();
+    });
+
+    input.addEventListener("keydown", event => {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (!list.classList.contains("is-open")) renderList();
+        setActive(activeIndex + 1);
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setActive(activeIndex - 1);
+      } else if (event.key === "Enter" && activeIndex >= 0) {
+        event.preventDefault();
+        selectCity(results[activeIndex]);
+      } else if (event.key === "Escape") {
+        closeList();
+      }
+    });
+
+    button.addEventListener("click", event => {
+      if (selectedCity && !button.classList.contains("is-soon")) return;
+      if (selectedCity) { event.preventDefault(); input.focus(); return; }
+      event.preventDefault();
+      // Fecha a lista para o aviso ficar visivel e para nao cobrir o botao
+      closeList();
+      naoAbrirAte = Date.now() + 600;
+      status.textContent = "Primeiro digite e escolha sua cidade.";
+      status.classList.add("is-error");
+      input.classList.add("is-error");
+      input.placeholder = "Digite sua cidade aqui";
+      input.focus({ preventScroll: true });
+    });
+
+    document.addEventListener("click", event => {
+      if (!event.target.closest(".city-picker, #whatsapp-link")) closeList();
+    });
+  </script>
+  <script>
+    document.getElementById("info-image").src = document.querySelector(".photo img").src;
+
+    // Leva a pessoa de volta ao campo da cidade
+    document.querySelectorAll(".js-go-form").forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        document.getElementById("grupo").scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => document.getElementById("city-search").focus({ preventScroll: true }), 450);
+      });
+    });
+
+    // Mostra a barra fixa só quando o formulário não está visível
+    const sticky = document.getElementById("sticky");
+    new IntersectionObserver(([entry]) => {
+      const show = !entry.isIntersecting;
+      sticky.classList.toggle("is-visible", show);
+      sticky.setAttribute("aria-hidden", String(!show));
+      sticky.querySelector("a").tabIndex = show ? 0 : -1;
+    }).observe(document.querySelector(".card"));
+  </script>
+</body>
+</html>
